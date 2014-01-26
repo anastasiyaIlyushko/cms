@@ -26,7 +26,7 @@ class PageModule extends CWebModule {
         return array(
             
             '/'=>'page/default/view',
-            '/<id:[\d]+>'=>'page/default/view',
+            '/<pageTitle:\w+>'=>'page/default/view',
 //            'blog/feed'=>'blog/feed/index',
 //            'blog/search'=>'blog/default/search',
 //            'blog/tag/<tag:[\w-]+>'=>'blog/default/tag',

@@ -23,4 +23,5 @@ class Controller extends CController
         
         public $pageKeywords;
         public $pageDescription;
+        //public $menuItems = array();
 }

@@ -1,37 +1,33 @@
 <?php
 
-class DModuleUrlRulesBehavior extends CBehavior
-{
+class DModuleUrlRulesBehavior extends CBehavior {
+
     public $beforeCurrentModule = array();
     public $afterCurrentModule = array();
- 
-    public function events()
-    {
-        return array_merge(parent::events(),array(
-            'onBeginRequest'=>'beginRequest',
+
+    public function events() {
+        return array_merge(parent::events(), array(
+            'onBeginRequest' => 'beginRequest',
         ));
     }
- 
-    public function beginRequest($event)
-    {
-        $module = $this->_getCurrentModuleName();
-        
+
+    public function beginRequest($event) {
+        $module = self::getCurrentModuleName();
+
         $list = array_merge(
-            $this->beforeCurrentModule,
-            array($module),
-            $this->afterCurrentModule
+                $this->beforeCurrentModule, array($module), $this->afterCurrentModule
         );
-        
- 
+
+
         foreach ($list as $name)
             DUrlRulesHelper::import($name);
     }
- 
-    protected function _getCurrentModuleName()
-    {
+
+    public static function getCurrentModuleName() {
         $route = Yii::app()->getRequest()->getPathInfo();
         $domains = explode('/', $route);
         $moduleName = array_shift($domains);
         return $moduleName;
     }
+
 }
