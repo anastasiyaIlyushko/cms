@@ -1,6 +1,6 @@
 <?php /* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/admin/main'); ?>
-<div class="row">
+
     <div class="span9">
         <div id="content">
             <?php echo $content; ?>
@@ -20,5 +20,5 @@
         ?>
         </div><!-- sidebar -->
     </div>
-</div>
+
 <?php $this->endContent(); ?>

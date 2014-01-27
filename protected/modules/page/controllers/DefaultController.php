@@ -36,8 +36,10 @@ class DefaultController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView() {
-        if (!isset($pageTitle)) {
+        if (!isset($_GET['pageTitle'])) {
             $pageTitle = 'home'; //Главная
+        }else{
+            $pageTitle = $_GET['pageTitle'];
         }
 
         $this->render('view', array(
@@ -55,24 +57,6 @@ class DefaultController extends Controller {
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
-    }
-
-    public static function getMenuItems() {
-        $currentModuleName = DModuleUrlRulesBehavior::getCurrentModuleName();
-        $pages = Page::model()->findAll();
-        $menuItems = array();
-        foreach ($pages as $onePage) {
-            $onePageParam = array();
-            $onePageParam['label'] = $onePage->label;
-            $onePageParam['url'] = $onePage->pageTitle;
-            if ($currentModuleName == $onePage->pageTitle) {
-                $onePageParam['active'] = TRUE;
-            }
-
-
-            $menuItems[] = $onePageParam;
-        }
-        return $menuItems;
     }
 
 }

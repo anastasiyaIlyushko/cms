@@ -24,7 +24,7 @@ class PageModule extends CWebModule {
     public static function getUrlRules()
     {
         return array(
-            
+            'admin/page/<controller:\w+>/<action:\w+>/<id:\d+>' => 'admin/page/<controller>/<action>',
             '/'=>'page/default/view',
             '/<pageTitle:\w+>'=>'page/default/view',
 //            'blog/feed'=>'blog/feed/index',

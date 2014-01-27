@@ -63,17 +63,17 @@ class Page extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'parentId' => 'Parent',
-			'menuTitle' => 'Menu Title',
-			'pageTitle' => 'Page Title',
-			'content' => 'Content',
-			'seoTitle' => 'Seo Title',
-			'seoDescription' => 'Seo Description',
-			'seoKeywords' => 'Seo Keywords',
-			'isShow' => 'Is Show',
+			'parentId' => 'Родительская страница',
+			'menuTitle' => 'Название пункта меню',
+			'pageTitle' => 'Название ссылки',
+			'content' => 'Содержимое',
+			'seoTitle' => 'Заголовок Seo',
+			'seoDescription' => 'Описание Seo',
+			'seoKeywords' => 'Ключевые слова Seo',
+			'isShow' => 'Показать в меню',
 			'isDelete' => 'Is Delete',
-			'type' => 'Type',
-			'sorter' => 'Sorter',
+			'type' => 'Тип',
+			'sorter' => 'Порядок отображения',
 		);
 	}
 
@@ -107,6 +107,8 @@ class Page extends CActiveRecord
 		$criteria->compare('isDelete',$this->isDelete);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('sorter',$this->sorter);
+                
+                $criteria->order = 'sorter';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -123,4 +125,12 @@ class Page extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+//        public function beforeSave() {
+//            parent::beforeSave();
+//            if(!isset($this->parentId)){
+//                $this->parentId = 0;
+//            }
+//            
+//        }
 }

@@ -15,35 +15,28 @@
     </head>
 
     <body>
-"nj flvbyrf!!!
-        <?php
-        $this->widget('bootstrap.widgets.TbNavbar', array(
-            'items' => array(
-                array(
-                    'class' => 'bootstrap.widgets.TbMenu',
-                    'items' => array(
-                        array('label' => 'Home', 'url' => array('/site/index')),
-                        array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
-                        array('label' => 'Contact', 'url' => array('/site/contact')),
-                        array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-                        array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
-                    ),
-                ),
-            ),
-        ));
-        ?>
+        "nj flvbyrf!!!
+        <!--<div class="container" id="page">-->
+        <div class="span15" id="page">
+            <div class="row">
+                <div class="span3">
+                    <?php
+                    $this->widget('bootstrap.widgets.TbMenu', array(
+                        'type' => 'pills',
+                        'stacked' => TRUE,
+                        'items' => array(
+                            array('label' => 'Home', 'url' => array('/site/index')),
+                            array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
+                            array('label' => 'Contact', 'url' => array('/site/contact')),
+                            array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
+                            array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
+                        ),
+                    ));
+                    ?>
+                </div>
+                    <?php echo $content; ?>
 
-        <div class="container" id="page">
-
-            <?php if (isset($this->breadcrumbs)): ?>
-                <?php
-                $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
-                    'links' => $this->breadcrumbs,
-                ));
-                ?><!-- breadcrumbs -->
-<?php endif ?>
-
-<?php echo $content; ?>
+            </div>
 
             <div class="clear"></div>
 

@@ -13,10 +13,10 @@ class MenuItemsHelper {
             if ($currentModuleName == $onePage->pageTitle) {
                 $onePageParam['active'] = TRUE;
             }
-
-
             $menuItems[] = $onePageParam;
         }
+
+
         return $menuItems;
     }
 

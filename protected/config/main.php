@@ -6,6 +6,7 @@
 // CWebApplication properties can be configured here.
 
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+Yii::setPathOfAlias('ckeditor', dirname(__FILE__) . '/../extensions/bootstrap');
 // получаем список директорий в protected/modules
 $dirs = scandir(dirname(__FILE__) . '/../modules');
 
@@ -75,9 +76,9 @@ return array(
                 // небольшая защита от дублирования адресов
                 '<module:' . MODULES_MATCHES . '>/default/index' => 'main/error/error404',
                 '<module:' . MODULES_MATCHES . '>/default' => 'main/error/error404',
-                // правила для экшенов админки    
+                // правила для экшенов админки  
                 '/admin/<module:' . MODULES_MATCHES . '>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/backend/<controller>/<action>',
-                '/admin/<module:' . MODULES_MATCHES . '>/<controller:\w+>' => '<module>/backend/<controller>/index',
+                '/admin/<module:' . MODULES_MATCHES . '>/<controller:\w+>' => '<module>/backend/<controller>/admin',
                 '/admin/<module:' . MODULES_MATCHES . '>/<controller:\w+>/<action:\w+>' => '<module>/backend/<controller>/<action>',
             ),
         ),
