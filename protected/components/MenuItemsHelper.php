@@ -4,7 +4,7 @@ class MenuItemsHelper {
 
     public static function getMenuItems() {
         $currentModuleName = DModuleUrlRulesBehavior::getCurrentModuleName();
-        $pages = Page::model()->findAll();
+        $pages = Page::model()->findAll('isDelete = 0 AND isShow = 1');
         $menuItems = array();
         foreach ($pages as $onePage) {
             $onePageParam = array();

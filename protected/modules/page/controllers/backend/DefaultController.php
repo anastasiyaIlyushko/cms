@@ -33,7 +33,7 @@ class DefaultController extends Controller {
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete', 'move'),
+                'actions' => array('admin', 'delete', 'move', 'visible'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -48,24 +48,38 @@ class DefaultController extends Controller {
      */
     public function actionCreate() {
         $model = new Page;
-        $availableParentPages = Page::model()->findAll("parentId=:parentId", array("parentId" => 0));
+        $availableParentPages = Page::model()->findAll("parentId=:parentId AND isDelete=0", array("parentId" => 0));
         $parentPages = array(0 => '');
         foreach ($availableParentPages as $oneParentPage) {
             $parentPages[$oneParentPage->id] = $oneParentPage->menuTitle;
         }
 
+        $deletedPages = Page::model()->findAll(array('select' => 'pageTitle', 'condition' => 'isDelete=1'));
+        foreach ($deletedPages as $oneDeletePage) {
+            $delPages[] = $oneDeletePage->pageTitle;
+        }
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-        
+
 
         if (isset($_POST['Page'])) {
             $model->attributes = $_POST['Page'];
-            $model->isShow = 0;
-            $model->isDelete = 0;
-            $model->type = 1;
-            $model->sorter = $countPages = Page::model()->count() + 1;
-            if ($model->save())
-                $this->redirect(array('admin'));
+
+            if (in_array($model->pageTitle, $delPages)) {
+                $almostExistPage = Page::model()->find('pageTitle=:pageTitle', array(':pageTitle' => $model->pageTitle));
+                $almostExistPage->isDelete = 0;
+                $almostExistPage->isShow = 0;
+                if ($almostExistPage->save()) {
+                    $this->redirect(array('admin'));
+                }
+            } else {
+                $model->isShow = 0;
+                $model->isDelete = 0;
+                $model->type = 1;
+                $model->sorter = Page::getSorterLimit('down') + 1;
+                if ($model->save())
+                    $this->redirect(array('admin'));
+            }
         }
 
         $this->render('create', array(
@@ -120,10 +134,54 @@ class DefaultController extends Controller {
         } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
-    
+
     public function actionMove($id, $direction) {
-        var_dump($_GET);
-        exit();
+        $model = $this->loadModel($id);
+        $sorter = $model->sorter;
+        switch ($direction) {
+            case 'up':
+                if ($sorter > Page::getSorterLimit($direction)) {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition = 'sorter<:sorter';
+                    $criteria->params = array(':sorter' => $sorter);
+                    $criteria->order = 'sorter DESC';
+                    $prevModel = Page::model()->find($criteria);
+
+                    //$prevModel = Page::model()->find('sorter>:sorter', array(':sorter' => $sorter))->;
+                    $model->sorter = $prevModel->sorter;
+                    $model->save();
+                    $prevModel->sorter = $sorter;
+                    $prevModel->save();
+                } else {
+                    throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+                }
+                break;
+            case 'down':
+                if ($sorter < Page::getSorterLimit($direction)) {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition = 'sorter>:sorter';
+                    $criteria->params = array(':sorter' => $sorter);
+                    $criteria->order = 'sorter';
+                    $nextModel = Page::model()->find($criteria);
+                    $model->sorter = $nextModel->sorter;
+                    $model->save();
+                    $nextModel->sorter = $sorter;
+                    $nextModel->save();
+                } else {
+                    throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+                }
+                break;
+            default :
+                throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        }
+        $this->redirect(array('admin'));
+    }
+
+    public function actionVisible($id) {
+        $model = $this->loadModel($id);
+        $model->isShow = ($model->isShow == 1) ? 0 : 1;
+        $model->save();
+        $this->redirect(array('admin'));
     }
 
     /**

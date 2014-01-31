@@ -23,6 +23,7 @@ define('MODULES_MATCHES', implode('|', array_keys($modules)));
 
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
+   // 'theme' => 'new_tem',
     'theme' => 'bootstrap',
     'name' => 'My Web Application',
     // preloading 'log' component
